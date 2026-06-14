@@ -2,23 +2,24 @@ namespace FolderMap.Services.DirectoryNodeServices;
 
 public class DirectoryService : IDirectoryService
 {
-    private string path;
+    private string Path { get; set; } = @"D:\sources\repos\FolderMap";
     private DirectoryInfo directory;
+    public string Name { get; }
 
     public DirectoryService()
     {
-        path = @"D:\sources\repos\FolderMap";
-        directory = new DirectoryInfo(path);
+        directory = new DirectoryInfo(Path);
+        Name = directory.Name;
     }
 
     public string GetPath()
     {
-        return path;
+        return Path;
     }
 
     public void SetPath(string newPath)
     {
-        path = newPath;
+        Path = newPath;
     }
 
     public IEnumerable<DirectoryInfo> GetAllDirectories()
@@ -31,8 +32,11 @@ public class DirectoryService : IDirectoryService
         return directory.EnumerateFiles();
     }
 
-    public DirectoryInfo GetParentDirectory()
+    public void BackPath()
     {
-        return directory.Parent;
+        var pathArray = GetPath().Split('\\').Where(name => !name.Equals(Name));
+        var newPath = string.Join('\\', pathArray);
+        SetPath(newPath);
+        directory = new DirectoryInfo(newPath);
     }
 }
