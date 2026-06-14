@@ -25,6 +25,7 @@ public class DirectoryMenu
         switch (option)
         {
             case "dir": ViewAllFilesDireactory(); break;
+            case "cd..": Back(); break;
             case "--help": Help(); break;
             default: Console.WriteLine("You choose a different number."); break;
         }
@@ -46,5 +47,11 @@ public class DirectoryMenu
     public void Help()
     {
         Console.WriteLine("dir - Show all files and folders in this path.");
+        Console.WriteLine("cd.. - Go back");
+    }
+
+    public void Back()
+    {
+        directoryService.BackPath();
     }
 }
