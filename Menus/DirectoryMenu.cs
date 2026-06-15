@@ -16,7 +16,7 @@ public class DirectoryMenu
         string option = "";
         do
         {
-            Console.Write($"$ (--help) <{directoryService.GetPath()}>: ");
+            Console.Write($"$({directoryService.GetPath()}): ");
             option = Console.ReadLine();
 
             SelectionMenu(option);
@@ -28,11 +28,12 @@ public class DirectoryMenu
     {
         switch (option)
         {
-            case "dir": ViewAllFilesDireactoryMenu(); break;
-            case "cd..": BackMenu(); break;
-            case "mv": AccessMenu(); break;
-            case "--help": HelpMenu(); break;
-            default: Console.WriteLine("You choose a different number."); break;
+            case "all": ViewAllFilesDireactoryMenu(); break;
+            case "back": BackMenu(); break;
+            case "forth": AccessMenu(); break;
+            case "filter": FilterFilesMenu(); break;
+            case "help": HelpMenu(); break;
+            default: Console.WriteLine("You choose a different number."); HelpMenu(); break;
         }
     }
 
@@ -45,15 +46,16 @@ public class DirectoryMenu
 
         foreach(var file in directoryService.GetAllFiles())
         {
-            Console.WriteLine(file.Name + $" ({file.Length / 1000.0} kb)");
+            Console.WriteLine($"{file.Name} ({file.Length / 1000.0} kb)");
         }
     }
 
     public void HelpMenu()
     {
-        Console.WriteLine("dir - Show all files and folders in this path.");
-        Console.WriteLine("cd.. - Go back");
-        Console.WriteLine("mv - Access the folder");
+        Console.WriteLine("all - Show all files and folders in this path.");
+        Console.WriteLine("back - Go back");
+        Console.WriteLine("forth - Access the folder");
+        Console.WriteLine("filter - only files with extencion");
         Console.WriteLine("quit - Exit the program");
     }
 
@@ -74,5 +76,23 @@ public class DirectoryMenu
 
         if (isMove is false)
             Console.WriteLine($"{name} is not folder.");
+    }
+
+    public void FilterFilesMenu()
+    {
+        Console.Write("Enter the file extension: ");
+        string extension = Console.ReadLine();
+
+        var files = directoryService.FilterFiles(extension);
+
+        if (files is not null)
+        {
+            foreach (FileInfo file in files)
+            {
+                Console.WriteLine($"{file.Name} ({file.Length / 1000.0} kb)");
+            }
+        }
+        else
+            Console.WriteLine("There are no files with this extension.");        
     }
 }

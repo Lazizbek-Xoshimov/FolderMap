@@ -8,4 +8,5 @@ public interface IDirectoryService
     public IEnumerable<FileInfo> GetAllFiles();
     public bool BackPath();
     public bool AccessPath(string name);
+    public IEnumerable<FileInfo> FilterFiles(string extension);
 }

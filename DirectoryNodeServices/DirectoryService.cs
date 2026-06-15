@@ -59,4 +59,9 @@ public class DirectoryService : IDirectoryService
 
         return false;
     }
+
+    public IEnumerable<FileInfo> FilterFiles(string extension)
+    {
+        return directory.EnumerateFiles().Where(file => file.Extension.Equals(extension));
+    }
 }
