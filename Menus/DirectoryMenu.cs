@@ -30,9 +30,10 @@ public class DirectoryMenu
         {
             case "all": ViewAllFilesDireactoryMenu(); break;
             case "back": BackMenu(); break;
-            case "forth": AccessMenu(); break;
-            case "filter": FilterFilesMenu(); break;
+            case "move": AccessMenu(); break;
+            case "only": FilterFilesMenu(); break;
             case "help": HelpMenu(); break;
+            case "quit": break;
             default: Console.WriteLine("You choose a different number."); HelpMenu(); break;
         }
     }
@@ -41,22 +42,31 @@ public class DirectoryMenu
     {
         foreach(var directory in directoryService.GetAllDirectories())
         {
+            Console.BackgroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine(directory.Name);
+            Console.ResetColor();
         }
 
         foreach(var file in directoryService.GetAllFiles())
         {
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine($"{file.Name} ({file.Length / 1000.0} kb)");
+            Console.ResetColor();
         }
     }
 
     public void HelpMenu()
     {
+        Console.BackgroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.Black;
         Console.WriteLine("all - Show all files and folders in this path.");
         Console.WriteLine("back - Go back");
-        Console.WriteLine("forth - Access the folder");
-        Console.WriteLine("filter - only files with extencion");
+        Console.WriteLine("move - Access the folder");
+        Console.WriteLine("only - only files with extencion");
         Console.WriteLine("quit - Exit the program");
+        Console.ResetColor();
     }
 
     public void BackMenu()
@@ -64,7 +74,12 @@ public class DirectoryMenu
         bool isBack = directoryService.BackPath();
 
         if (isBack is false)
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine($"Cannot be moved.");
+            Console.ResetColor();
+        }
     }
 
     public void AccessMenu()
@@ -75,7 +90,12 @@ public class DirectoryMenu
         bool isMove = directoryService.AccessPath(name);
 
         if (isMove is false)
-            Console.WriteLine($"{name} is not folder.");
+        {
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine($"{name} is not folder.");   
+            Console.ResetColor();
+        }
     }
 
     public void FilterFilesMenu()
@@ -89,10 +109,18 @@ public class DirectoryMenu
         {
             foreach (FileInfo file in files)
             {
+                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine($"{file.Name} ({file.Length / 1000.0} kb)");
+                Console.ResetColor();
             }
         }
         else
+        {
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("There are no files with this extension.");        
+            Console.ResetColor();
+        }
     }
 }
