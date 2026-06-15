@@ -7,4 +7,5 @@ public interface IDirectoryService
     public IEnumerable<DirectoryInfo> GetAllDirectories();
     public IEnumerable<FileInfo> GetAllFiles();
     public void BackPath();
+    public bool AccessPath(string name);
 }

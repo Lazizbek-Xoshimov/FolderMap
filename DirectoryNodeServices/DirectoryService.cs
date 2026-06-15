@@ -4,7 +4,7 @@ public class DirectoryService : IDirectoryService
 {
     private string Path { get; set; } = @"D:\sources\repos\FolderMap";
     private DirectoryInfo directory;
-    public string Name { get; }
+    public string Name { get; set; }
 
     public DirectoryService()
     {
@@ -38,5 +38,20 @@ public class DirectoryService : IDirectoryService
         var newPath = string.Join('\\', pathArray);
         SetPath(newPath);
         directory = new DirectoryInfo(newPath);
+        Name = directory.Name;
+    }
+
+    public bool AccessPath(string name)
+    {
+        if (directory.EnumerateDirectories().Select(directory => directory.Name).Contains(name))
+        {
+            Path += $"\\{name}";
+            directory = new DirectoryInfo(Path);
+            Name = directory.Name;
+
+            return true;
+        }
+
+        return false;
     }
 }

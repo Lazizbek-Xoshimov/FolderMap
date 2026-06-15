@@ -13,25 +13,31 @@ public class DirectoryMenu
 
     public void BaseMenu()
     {
-        Console.WriteLine(directoryService.GetPath());
+        string option = "";
+        do
+        {
+            Console.WriteLine(directoryService.GetPath());
+            Console.Write("$ (--help): ");
+            option = Console.ReadLine();
 
-        Console.Write("$ (--help): ");
-        string option = Console.ReadLine();
-        SelectionMenu(option);
+            SelectionMenu(option);
+            
+        } while (!option.Equals("quit"));
     }
 
     public void SelectionMenu(string option)
     {
         switch (option)
         {
-            case "dir": ViewAllFilesDireactory(); break;
-            case "cd..": Back(); break;
-            case "--help": Help(); break;
+            case "dir": ViewAllFilesDireactoryMenu(); break;
+            case "cd..": BackMenu(); break;
+            case "mv": AccessMenu(); break;
+            case "--help": HelpMenu(); break;
             default: Console.WriteLine("You choose a different number."); break;
         }
     }
 
-    public void ViewAllFilesDireactory()
+    public void ViewAllFilesDireactoryMenu()
     {
         foreach(var directory in directoryService.GetAllDirectories())
         {
@@ -44,14 +50,27 @@ public class DirectoryMenu
         }
     }
 
-    public void Help()
+    public void HelpMenu()
     {
         Console.WriteLine("dir - Show all files and folders in this path.");
         Console.WriteLine("cd.. - Go back");
+        Console.WriteLine("mv - Access the folder");
+        Console.WriteLine("quit - Exit the program");
     }
 
-    public void Back()
+    public void BackMenu()
     {
         directoryService.BackPath();
+    }
+
+    public void AccessMenu()
+    {
+        Console.Write("Enter a folder name: ");
+        string name = Console.ReadLine();
+
+        bool isMove = directoryService.AccessPath(name);
+
+        if (isMove is false)
+            Console.WriteLine($"{name} is not folder.");
     }
 }
