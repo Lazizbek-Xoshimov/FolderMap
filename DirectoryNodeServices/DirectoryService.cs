@@ -32,13 +32,18 @@ public class DirectoryService : IDirectoryService
         return directory.EnumerateFiles();
     }
 
-    public void BackPath()
+    public bool BackPath()
     {
-        var pathArray = GetPath().Split('\\').Where(name => !name.Equals(Name));
-        var newPath = string.Join('\\', pathArray);
-        SetPath(newPath);
-        directory = new DirectoryInfo(newPath);
-        Name = directory.Name;
+        if (directory.Parent is not null)
+        {
+            SetPath(directory.Parent.FullName);
+            directory = new DirectoryInfo(Path);
+            Name = directory.Name;
+
+            return true;
+        }
+
+        return false;
     }
 
     public bool AccessPath(string name)

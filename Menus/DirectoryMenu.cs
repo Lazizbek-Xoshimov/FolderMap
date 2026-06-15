@@ -16,8 +16,7 @@ public class DirectoryMenu
         string option = "";
         do
         {
-            Console.WriteLine(directoryService.GetPath());
-            Console.Write("$ (--help): ");
+            Console.Write($"$ (--help) <{directoryService.GetPath()}>: ");
             option = Console.ReadLine();
 
             SelectionMenu(option);
@@ -60,7 +59,10 @@ public class DirectoryMenu
 
     public void BackMenu()
     {
-        directoryService.BackPath();
+        bool isBack = directoryService.BackPath();
+
+        if (isBack is false)
+            Console.WriteLine($"Cannot be moved.");
     }
 
     public void AccessMenu()

@@ -6,6 +6,6 @@ public interface IDirectoryService
     public void SetPath(string newPath);
     public IEnumerable<DirectoryInfo> GetAllDirectories();
     public IEnumerable<FileInfo> GetAllFiles();
-    public void BackPath();
+    public bool BackPath();
     public bool AccessPath(string name);
 }
