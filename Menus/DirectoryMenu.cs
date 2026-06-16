@@ -128,6 +128,7 @@ public class DirectoryMenu
 
     public void ShowTreeMenu()
     {
+        Console.WriteLine($"{directoryService.GetPath()}");
         directoryService.ShowTree(directoryService.GetPath());
     }
 }

@@ -4,12 +4,12 @@ public class DirectoryService : IDirectoryService
 {
     private string Path { get; set; } = @"D:\sources\repos\FolderMap";
     private DirectoryInfo directory;
-    public string Name { get; set; }
+
+    private string space = "";
 
     public DirectoryService()
     {
         directory = new DirectoryInfo(Path);
-        Name = directory.Name;
     }
 
     public string GetPath()
@@ -38,7 +38,6 @@ public class DirectoryService : IDirectoryService
         {
             SetPath(directory.Parent.FullName);
             directory = new DirectoryInfo(Path);
-            Name = directory.Name;
 
             return true;
         }
@@ -52,7 +51,6 @@ public class DirectoryService : IDirectoryService
         {
             Path += $"\\{name}";
             directory = new DirectoryInfo(Path);
-            Name = directory.Name;
 
             return true;
         }
@@ -67,25 +65,19 @@ public class DirectoryService : IDirectoryService
 
     public void ShowTree(string path)
     {
-        string space = "";
+        var currentDir = new DirectoryInfo(path);
 
-        if (!directory.EnumerateDirectories().Count().Equals(0))
+        foreach (var folder in currentDir.EnumerateDirectories())
         {
-            foreach (var folder in directory.EnumerateDirectories())
-            {
-                Console.WriteLine(space + folder.Name);
-                directory = new DirectoryInfo(folder.FullName);
-                space += " ";
-                ShowTree(folder.FullName);
-            }
+            Console.WriteLine(space + folder.Name);
+            space += "-";
+            ShowTree(folder.FullName);
+            space = space.Substring(0, space.Length - 1); 
         }
 
-        if (!directory.EnumerateFiles().Count().Equals(0))
+        foreach (var file in currentDir.EnumerateFiles())
         {
-            foreach (var file in directory.EnumerateFiles())
-            {
-                Console.WriteLine(space + file.Name);
-            }
+            Console.WriteLine(space + $"{file.Name} ({file.Length / 1000.0} kb)");
         }
     }
 }
