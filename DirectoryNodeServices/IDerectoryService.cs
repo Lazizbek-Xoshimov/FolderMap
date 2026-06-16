@@ -9,4 +9,5 @@ public interface IDirectoryService
     public bool BackPath();
     public bool AccessPath(string name);
     public IEnumerable<FileInfo> FilterFiles(string extension);
+    public void ShowTree(string path = null);
 }

@@ -64,4 +64,28 @@ public class DirectoryService : IDirectoryService
     {
         return directory.EnumerateFiles().Where(file => file.Extension.Equals(extension));
     }
+
+    public void ShowTree(string path)
+    {
+        string space = "";
+
+        if (!directory.EnumerateDirectories().Count().Equals(0))
+        {
+            foreach (var folder in directory.EnumerateDirectories())
+            {
+                Console.WriteLine(space + folder.Name);
+                directory = new DirectoryInfo(folder.FullName);
+                space += " ";
+                ShowTree(folder.FullName);
+            }
+        }
+
+        if (!directory.EnumerateFiles().Count().Equals(0))
+        {
+            foreach (var file in directory.EnumerateFiles())
+            {
+                Console.WriteLine(space + file.Name);
+            }
+        }
+    }
 }

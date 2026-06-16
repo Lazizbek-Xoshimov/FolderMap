@@ -33,6 +33,7 @@ public class DirectoryMenu
             case "move": AccessMenu(); break;
             case "only": FilterFilesMenu(); break;
             case "help": HelpMenu(); break;
+            case "tree": ShowTreeMenu(); break;
             case "quit": break;
             default: Console.WriteLine("You choose a different number."); HelpMenu(); break;
         }
@@ -64,7 +65,8 @@ public class DirectoryMenu
         Console.WriteLine("all - Show all files and folders in this path.");
         Console.WriteLine("back - Go back");
         Console.WriteLine("move - Access the folder");
-        Console.WriteLine("only - only files with extencion");
+        Console.WriteLine("only - Only files with extencion");
+        Console.WriteLine("tree - Show a tree of all in path");
         Console.WriteLine("quit - Exit the program");
         Console.ResetColor();
     }
@@ -122,5 +124,10 @@ public class DirectoryMenu
             Console.WriteLine("There are no files with this extension.");        
             Console.ResetColor();
         }
+    }
+
+    public void ShowTreeMenu()
+    {
+        directoryService.ShowTree(directoryService.GetPath());
     }
 }
