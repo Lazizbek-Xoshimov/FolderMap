@@ -10,5 +10,6 @@ public enum Option : short
     tree,
     quit,
     find,
+    sort,
     another
 }

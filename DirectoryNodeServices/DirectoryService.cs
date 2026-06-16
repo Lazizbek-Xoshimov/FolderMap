@@ -1,3 +1,5 @@
+using FolderMap.Menus.Commands;
+
 namespace FolderMap.Services.DirectoryNodeServices;
 
 public class DirectoryService : IDirectoryService
@@ -98,5 +100,19 @@ public class DirectoryService : IDirectoryService
         }
 
         return null;
+    }
+
+    public IEnumerable<FileInfo> SortFiles(SortOption sortOption)
+    {
+        IEnumerable<FileInfo> files = directory.EnumerateFiles();
+
+        switch(sortOption)
+        {
+            case SortOption.name: files = files.OrderBy(file => file.Name); break;    
+            case SortOption.date: files = files.OrderBy(file => file.CreationTime); break;    
+            case SortOption.size: files = files.OrderBy(file => file.Length); break;    
+        }
+
+        return files;
     }
 }

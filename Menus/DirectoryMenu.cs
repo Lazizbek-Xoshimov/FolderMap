@@ -7,10 +7,12 @@ namespace FolderMap.Menus;
 public class DirectoryMenu
 {
     private IDirectoryService directoryService;
+    int position;
 
     public DirectoryMenu()
     {
         directoryService = new DirectoryService();
+        position = 0;
     }
 
     public void BaseMenu()
@@ -42,6 +44,7 @@ public class DirectoryMenu
             case Option.help: HelpMenu(); break;
             case Option.tree: ShowTreeMenu(); break;
             case Option.find: FindFileMenu(); break;
+            case Option.sort: SortFilesMenu(); break;
             case Option.quit: break;
             case Option.another: Console.WriteLine("You choose a different number."); HelpMenu(); break;
         }
@@ -68,6 +71,7 @@ public class DirectoryMenu
 
     public void HelpMenu()
     {
+        Console.Clear();
         Console.BackgroundColor = ConsoleColor.Green;
         Console.ForegroundColor = ConsoleColor.Black;
         Console.WriteLine("all - Show all files and folders in this path.");
@@ -76,6 +80,7 @@ public class DirectoryMenu
         Console.WriteLine("only - Only files with extencion");
         Console.WriteLine("tree - Show a tree of all in path");
         Console.WriteLine("find - Search for a folder or file");
+        Console.WriteLine("sort - Sort files by name, size and date");
         Console.WriteLine("quit - Exit the program");
         Console.ResetColor();
     }
@@ -95,6 +100,7 @@ public class DirectoryMenu
 
     public void AccessMenu()
     {
+        Console.Clear();
         Console.Write("Enter a folder name: ");
         string name = Console.ReadLine();
 
@@ -111,6 +117,7 @@ public class DirectoryMenu
 
     public void FilterFilesMenu()
     {
+        Console.Clear();
         Console.Write("Enter the file extension: ");
         string extension = Console.ReadLine();
 
@@ -143,6 +150,7 @@ public class DirectoryMenu
 
     public void FindFileMenu()
     {
+        Console.Clear();
         Console.Write("Enter a file name: ");
         string fileName = Console.ReadLine();
 
@@ -152,5 +160,50 @@ public class DirectoryMenu
             Console.WriteLine($"{fileName} is not found.");
         else
             Console.WriteLine($"{fileName} file in {file.FullName} path.");
+    }
+
+    public void SortFilesMenu()
+    {
+        ConsoleKeyInfo press;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine($"$({directoryService.GetPath()}): ");
+            Console.WriteLine(" name");
+            Console.WriteLine(" date");
+            Console.WriteLine(" size");
+
+            switch (position)
+            {
+                case 0: Console.SetCursorPosition(0, 1); break;                        
+                case 1: Console.SetCursorPosition(0, 2); break;
+                case 2: Console.SetCursorPosition(0, 3); break;
+            }
+
+            Console.Write(">");
+            press = Console.ReadKey(true);
+
+            if (press.Key.Equals(ConsoleKey.DownArrow))
+            {
+                position ++;
+
+                if (position > 2)
+                    position = 0;
+            }
+            else if (press.Key.Equals(ConsoleKey.UpArrow))
+            {
+                position --;
+
+                if (position < 0)
+                    position = 2;
+            }
+
+        } while (!press.Key.Equals(ConsoleKey.Enter));
+
+        Console.Clear();
+        foreach (var file in directoryService.SortFiles(Enum.Parse<SortOption>(position.ToString())))
+        {
+            Console.WriteLine($"{file.Name} ({file.Length / 1000.0} kb) {file.CreationTime}");
+        }
     }
 }

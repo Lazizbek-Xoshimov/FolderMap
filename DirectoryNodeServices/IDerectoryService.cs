@@ -1,3 +1,5 @@
+using FolderMap.Menus.Commands;
+
 namespace FolderMap.Services.DirectoryNodeServices;
 
 public interface IDirectoryService
@@ -11,4 +13,5 @@ public interface IDirectoryService
     public IEnumerable<FileInfo> FilterFiles(string extension);
     public void ShowTree(string path = null);
     public FileInfo FindFile(string path = "", string fileName = "");
+    public IEnumerable<FileInfo> SortFiles(SortOption sortOption);
 }
