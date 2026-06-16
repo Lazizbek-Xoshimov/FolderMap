@@ -1,4 +1,5 @@
 using System.Reflection;
+using FolderMap.Menus.Colors;
 using FolderMap.Menus.Commands;
 using FolderMap.Services.DirectoryNodeServices;
 
@@ -54,35 +55,28 @@ public class DirectoryMenu
     {
         foreach(var directory in directoryService.GetAllDirectories())
         {
-            Console.BackgroundColor = ConsoleColor.Cyan;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine(directory.Name);
-            Console.ResetColor();
+            ConsoleColors.DirectoryColor(directory.Name);
         }
 
         foreach(var file in directoryService.GetAllFiles())
         {
-            Console.BackgroundColor = ConsoleColor.Gray;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine($"{file.Name} ({file.Length / 1000.0} kb)");
-            Console.ResetColor();
+            ConsoleColors.FileColor($"{file.Name} ({file.Length / 1000.0} kb)");
         }
     }
 
     public void HelpMenu()
     {
         Console.Clear();
-        Console.BackgroundColor = ConsoleColor.Green;
-        Console.ForegroundColor = ConsoleColor.Black;
-        Console.WriteLine("all - Show all files and folders in this path.");
-        Console.WriteLine("back - Go back");
-        Console.WriteLine("move - Access the folder");
-        Console.WriteLine("only - Only files with extencion");
-        Console.WriteLine("tree - Show a tree of all in path");
-        Console.WriteLine("find - Search for a folder or file");
-        Console.WriteLine("sort - Sort files by name, size and date");
-        Console.WriteLine("quit - Exit the program");
-        Console.ResetColor();
+        ConsoleColors.Info("""
+                            all - Show all files and folders in this path.
+                            back - Go back
+                            move - Access the folder
+                            only - Only files with extencion
+                            tree - Show a tree of all in path
+                            find - Search for a file
+                            sort - Sort files by name, size and date
+                            quit - Exit the program
+                            """);
     }
 
     public void BackMenu()
@@ -90,34 +84,22 @@ public class DirectoryMenu
         bool isBack = directoryService.BackPath();
 
         if (isBack is false)
-        {
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine($"Cannot be moved.");
-            Console.ResetColor();
-        }
+            ConsoleColors.Error("Cannot be moved.");
     }
 
     public void AccessMenu()
     {
-        Console.Clear();
         Console.Write("Enter a folder name: ");
         string name = Console.ReadLine();
 
         bool isMove = directoryService.AccessPath(name);
 
         if (isMove is false)
-        {
-            Console.BackgroundColor = ConsoleColor.Yellow;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine($"{name} is not folder.");   
-            Console.ResetColor();
-        }
+            ConsoleColors.Warning($"{name} is not folder.");
     }
 
     public void FilterFilesMenu()
     {
-        Console.Clear();
         Console.Write("Enter the file extension: ");
         string extension = Console.ReadLine();
 
@@ -127,19 +109,11 @@ public class DirectoryMenu
         {
             foreach (FileInfo file in files)
             {
-                Console.BackgroundColor = ConsoleColor.Gray;
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.WriteLine($"{file.Name} ({file.Length / 1000.0} kb)");
-                Console.ResetColor();
+                ConsoleColors.FileColor($"{file.Name} ({file.Length / 1000.0} kb)");
             }
         }
         else
-        {
-            Console.BackgroundColor = ConsoleColor.Yellow;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine("There are no files with this extension.");        
-            Console.ResetColor();
-        }
+            ConsoleColors.Warning("There are no files with this extension.");
     }
 
     public void ShowTreeMenu()
@@ -157,9 +131,9 @@ public class DirectoryMenu
         FileInfo file = directoryService.FindFile(directoryService.GetPath(), fileName);
 
         if (file is null)
-            Console.WriteLine($"{fileName} is not found.");
+            ConsoleColors.Warning($"{fileName} is not found.");
         else
-            Console.WriteLine($"{fileName} file in {file.FullName} path.");
+            ConsoleColors.FileColor($"{fileName} file in {file.FullName} path.");
     }
 
     public void SortFilesMenu()
@@ -169,9 +143,11 @@ public class DirectoryMenu
         {
             Console.Clear();
             Console.WriteLine($"$({directoryService.GetPath()}): ");
-            Console.WriteLine(" name");
-            Console.WriteLine(" date");
-            Console.WriteLine(" size");
+            ConsoleColors.Info("""
+                                  name
+                                  date
+                                  size
+                                """);
 
             switch (position)
             {
@@ -203,7 +179,7 @@ public class DirectoryMenu
         Console.Clear();
         foreach (var file in directoryService.SortFiles(Enum.Parse<SortOption>(position.ToString())))
         {
-            Console.WriteLine($"{file.Name} ({file.Length / 1000.0} kb) {file.CreationTime}");
+            ConsoleColors.FileColor($"{file.Name} ({file.Length / 1000.0} kb) {file.CreationTime}");
         }
     }
 }
