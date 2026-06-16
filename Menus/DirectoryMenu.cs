@@ -1,3 +1,5 @@
+using System.Reflection;
+using FolderMap.Menus.Commands;
 using FolderMap.Services.DirectoryNodeServices;
 
 namespace FolderMap.Menus;
@@ -13,29 +15,34 @@ public class DirectoryMenu
 
     public void BaseMenu()
     {
-        string option = "";
+        Option option;
+        
         do
         {
             Console.Write($"$({directoryService.GetPath()}): ");
-            option = Console.ReadLine();
+
+            bool isTrueCommand = Enum.TryParse<Option>(Console.ReadLine(), out option);
+
+            if (isTrueCommand is false)
+                option = Option.another;
 
             SelectionMenu(option);
-            
-        } while (!option.Equals("quit"));
+    
+        } while (!option.Equals(Option.quit));
     }
 
-    public void SelectionMenu(string option)
+    public void SelectionMenu(Option option)
     {
         switch (option)
         {
-            case "all": ViewAllFilesDireactoryMenu(); break;
-            case "back": BackMenu(); break;
-            case "move": AccessMenu(); break;
-            case "only": FilterFilesMenu(); break;
-            case "help": HelpMenu(); break;
-            case "tree": ShowTreeMenu(); break;
-            case "quit": break;
-            default: Console.WriteLine("You choose a different number."); HelpMenu(); break;
+            case Option.all: ViewAllFilesDireactoryMenu(); break;
+            case Option.back: BackMenu(); break;
+            case Option.move: AccessMenu(); break;
+            case Option.only: FilterFilesMenu(); break;
+            case Option.help: HelpMenu(); break;
+            case Option.tree: ShowTreeMenu(); break;
+            case Option.quit: break;
+            case Option.another: Console.WriteLine("You choose a different number."); HelpMenu(); break;
         }
     }
 
