@@ -9,5 +9,6 @@ public enum Option : short
     help,
     tree,
     quit,
+    find,
     another
 }

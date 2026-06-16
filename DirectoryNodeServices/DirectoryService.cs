@@ -80,4 +80,23 @@ public class DirectoryService : IDirectoryService
             Console.WriteLine(space + $"{file.Name} ({file.Length / 1000.0} kb)");
         }
     }
+
+    public FileInfo FindFile(string path, string fileName)
+    {   
+        DirectoryInfo currentDir = new DirectoryInfo(path);
+        FileInfo fileInfo = currentDir.EnumerateFiles().FirstOrDefault(file => file.Name.Equals(fileName));
+
+        if (fileInfo is not null)
+            return fileInfo;
+
+        foreach (var folder in currentDir.EnumerateDirectories())
+        {
+            fileInfo = FindFile(folder.FullName, fileName);
+
+            if (fileInfo is not null)
+                return fileInfo;
+        }
+
+        return null;
+    }
 }

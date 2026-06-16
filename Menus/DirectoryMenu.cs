@@ -41,6 +41,7 @@ public class DirectoryMenu
             case Option.only: FilterFilesMenu(); break;
             case Option.help: HelpMenu(); break;
             case Option.tree: ShowTreeMenu(); break;
+            case Option.find: FindFileMenu(); break;
             case Option.quit: break;
             case Option.another: Console.WriteLine("You choose a different number."); HelpMenu(); break;
         }
@@ -74,6 +75,7 @@ public class DirectoryMenu
         Console.WriteLine("move - Access the folder");
         Console.WriteLine("only - Only files with extencion");
         Console.WriteLine("tree - Show a tree of all in path");
+        Console.WriteLine("find - Search for a folder or file");
         Console.WriteLine("quit - Exit the program");
         Console.ResetColor();
     }
@@ -137,5 +139,18 @@ public class DirectoryMenu
     {
         Console.WriteLine($"{directoryService.GetPath()}");
         directoryService.ShowTree(directoryService.GetPath());
+    }
+
+    public void FindFileMenu()
+    {
+        Console.Write("Enter a file name: ");
+        string fileName = Console.ReadLine();
+
+        FileInfo file = directoryService.FindFile(directoryService.GetPath(), fileName);
+
+        if (file is null)
+            Console.WriteLine($"{fileName} is not found.");
+        else
+            Console.WriteLine($"{fileName} file in {file.FullName} path.");
     }
 }
