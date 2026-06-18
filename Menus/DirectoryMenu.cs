@@ -133,7 +133,24 @@ public class DirectoryMenu
         if (file is null)
             ConsoleColors.Warning($"{fileName} is not found.");
         else
+        {
             ConsoleColors.FileColor($"{fileName} file in {file.FullName} path.");
+
+            Console.WriteLine("Would you like to get information about this file?");
+            Console.Write("(yes/no): ");
+            string answer = Console.ReadLine();    
+            
+            if (answer.ToLower().Equals("yes"))
+            {
+                Console.WriteLine($"File name: {file.Name}");
+                Console.WriteLine($"File size: {file.Length / 1000.0} kb");
+                Console.WriteLine($"Number of lines in file: {File.ReadAllLines(file.FullName).Count()}");
+                Console.WriteLine($"Number of words in the file: {File.ReadAllText(file.FullName).Split(' ').Count()}");
+                Console.WriteLine($"File created: {file.CreationTime}");
+                Console.WriteLine($"File updated: {file.LastWriteTime}");
+            }
+        }
+
     }
 
     public void SortFilesMenu()
