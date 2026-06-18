@@ -26,6 +26,14 @@ public static class ConsoleColors
         Console.ResetColor();
     }
 
+    public static void InfoWrite(string text)
+    {
+        Console.BackgroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.Black;
+        Console.Write(text);
+        Console.ResetColor();
+    }
+
     public static void FileColor(string text)
     {
         Console.BackgroundColor = ConsoleColor.Gray;

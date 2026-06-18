@@ -11,5 +11,7 @@ public enum Option : short
     quit,
     find,
     sort,
+    files,
+    directories,
     another
 }

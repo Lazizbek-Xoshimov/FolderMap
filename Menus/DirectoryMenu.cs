@@ -8,12 +8,10 @@ namespace FolderMap.Menus;
 public class DirectoryMenu
 {
     private IDirectoryService directoryService;
-    int position;
 
     public DirectoryMenu()
     {
         directoryService = new DirectoryService();
-        position = 0;
     }
 
     public void BaseMenu()
@@ -46,6 +44,7 @@ public class DirectoryMenu
             case Option.tree: ShowTreeMenu(); break;
             case Option.find: FindFileMenu(); break;
             case Option.sort: SortFilesMenu(); break;
+            case Option.files: FilesMenu(); break;
             case Option.quit: break;
             case Option.another: Console.WriteLine("You choose a different number."); HelpMenu(); break;
         }
@@ -75,6 +74,7 @@ public class DirectoryMenu
                             tree - Show a tree of all in path
                             find - Search for a file
                             sort - Sort files by name, size and date
+                            files - Show files and operations on them
                             quit - Exit the program
                             """);
     }
@@ -139,7 +139,7 @@ public class DirectoryMenu
             Console.WriteLine("Would you like to get information about this file?");
             Console.Write("(yes/no): ");
             string answer = Console.ReadLine();    
-            
+
             if (answer.ToLower().Equals("yes"))
             {
                 Console.WriteLine($"File name: {file.Name}");
@@ -150,37 +150,44 @@ public class DirectoryMenu
                 Console.WriteLine($"File updated: {file.LastWriteTime}");
             }
         }
-
     }
 
     public void SortFilesMenu()
     {
+        int position = SelectWithArrow(new string[] {"name", "date", "size"});
+
+        Console.Clear();
+        foreach (var file in directoryService.SortFiles(Enum.Parse<SortOption>(position.ToString())))
+        {
+            ConsoleColors.FileColor($"{file.Name} ({file.Length / 1000.0} kb) {file.CreationTime}");
+        }
+    }
+
+    public int SelectWithArrow(IEnumerable<string> informations)
+    {
+        int position = 0;
         ConsoleKeyInfo press;
+
         do
         {
             Console.Clear();
             Console.WriteLine($"$({directoryService.GetPath()}): ");
-            ConsoleColors.Info("""
-                                  name
-                                  date
-                                  size
-                                """);
-
-            switch (position)
+            
+            foreach (var info in informations)
             {
-                case 0: Console.SetCursorPosition(0, 1); break;                        
-                case 1: Console.SetCursorPosition(0, 2); break;
-                case 2: Console.SetCursorPosition(0, 3); break;
+                ConsoleColors.Info("  " + info);
             }
 
-            Console.Write(">");
+            Console.SetCursorPosition(0, position + 1);
+
+            ConsoleColors.InfoWrite(">");
             press = Console.ReadKey(true);
 
             if (press.Key.Equals(ConsoleKey.DownArrow))
             {
                 position ++;
 
-                if (position > 2)
+                if (position > informations.Count() - 1)
                     position = 0;
             }
             else if (press.Key.Equals(ConsoleKey.UpArrow))
@@ -188,15 +195,56 @@ public class DirectoryMenu
                 position --;
 
                 if (position < 0)
-                    position = 2;
+                    position = informations.Count() - 1;
             }
 
         } while (!press.Key.Equals(ConsoleKey.Enter));
 
+        return position;
+    }
+
+    public void FilesMenu()
+    {
+        var files = directoryService.GetAllFiles().ToList();
+        int positionFile = SelectWithArrow(files.Select(file => file.Name));
+
+        string[] fileSelections = {"Add text", "Read text", "File information", "Back"};
+        int positionSelection = SelectWithArrow(fileSelections);
+
         Console.Clear();
-        foreach (var file in directoryService.SortFiles(Enum.Parse<SortOption>(position.ToString())))
+        switch (positionSelection)
         {
-            ConsoleColors.FileColor($"{file.Name} ({file.Length / 1000.0} kb) {file.CreationTime}");
+            case 0:
+            {
+                using StreamWriter streamWriter = files[positionFile].AppendText();
+
+                Console.Write("Enter the line you want to add: ");
+                string addingText = Console.ReadLine();
+
+                streamWriter.WriteLine(addingText);
+                break;
+            }
+            case 1:
+            {
+                using StreamReader streamReader = files[positionFile].OpenText();
+                
+                Console.WriteLine($"{files[positionFile].Name} file information: ");
+                string dataOfFile = streamReader.ReadToEnd();
+                Console.WriteLine(dataOfFile);
+                break;
+            }
+            case 2:
+            {
+                Console.WriteLine($"File name: {files[positionFile].Name}");
+                Console.WriteLine($"File size: {files[positionFile].Length / 1000.0} kb");
+                Console.WriteLine($"File created: {files[positionFile].CreationTime}");
+                Console.WriteLine($"File updated: {files[positionFile].LastWriteTime}");
+                break;
+            }
+            case 3:
+            {
+                break;
+            }
         }
     }
 }
