@@ -13,10 +13,12 @@ Accepting paths and outputting folders and files, and operating on them, using a
 - *tree - Show a tree of all in path*
 - *find - Search for a file*
 - *sort - Sort files by name, size and date*
+- *files - Show files and operations on them*
+- *name - Reads multiple names from Memory*
 - *quit - Exit the program*
 
 ### 🪟 Preview
-![folder_map_preview](assets/folder_map_preview_second.gif)
+![folder_map_preview](assets/folder_map_preview_third.gif)
 
 ### ⚙️ Technologies
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" width="30"/> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg" width="30"/>
