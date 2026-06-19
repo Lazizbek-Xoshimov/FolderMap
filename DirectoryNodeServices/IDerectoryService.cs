@@ -14,4 +14,5 @@ public interface IDirectoryService
     public void ShowTree(string path = null);
     public FileInfo FindFile(string path = "", string fileName = "");
     public IEnumerable<FileInfo> SortFiles(SortOption sortOption);
+    public void ShowNamesInMemory(List<string> names);
 }

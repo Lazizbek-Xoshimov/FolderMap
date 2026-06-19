@@ -115,4 +115,25 @@ public class DirectoryService : IDirectoryService
 
         return files;
     }
+
+    public void ShowNamesInMemory(List<string> names)
+    {
+        using (MemoryStream memoryStream = new MemoryStream())
+        {
+            using (StreamWriter streamWriter = new StreamWriter(memoryStream, leaveOpen: true))
+            {
+                foreach (string name in names)
+                {
+                    streamWriter.WriteLine(name);
+                }
+            }
+
+            memoryStream.Position = 0;
+
+            using (StreamReader streamReader = new StreamReader(memoryStream))
+            {
+                Console.WriteLine(streamReader.ReadToEnd());
+            }
+        }
+    }
 }

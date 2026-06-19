@@ -13,5 +13,6 @@ public enum Option : short
     sort,
     files,
     directories,
+    name,
     another
 }

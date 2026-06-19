@@ -45,6 +45,7 @@ public class DirectoryMenu
             case Option.find: FindFileMenu(); break;
             case Option.sort: SortFilesMenu(); break;
             case Option.files: FilesMenu(); break;
+            case Option.name: ShowNamesInMemoryMenu(); break;
             case Option.quit: break;
             case Option.another: Console.WriteLine("You choose a different number."); HelpMenu(); break;
         }
@@ -75,6 +76,7 @@ public class DirectoryMenu
                             find - Search for a file
                             sort - Sort files by name, size and date
                             files - Show files and operations on them
+                            name - Reads multiple names from Memory
                             quit - Exit the program
                             """);
     }
@@ -241,10 +243,24 @@ public class DirectoryMenu
                 Console.WriteLine($"File updated: {files[positionFile].LastWriteTime}");
                 break;
             }
-            case 3:
-            {
-                break;
-            }
+            case 3: break;
         }
+    }
+
+    public void ShowNamesInMemoryMenu()
+    {
+        List<string> names = new List<string>();
+        string name = string.Empty;
+
+        do
+        {
+            Console.Write("Enter a name: ");
+            name = Console.ReadLine();
+            names.Add(name);
+
+        } while (!name.Equals(string.Empty));
+
+        Console.WriteLine("Names in Memory:");
+        directoryService.ShowNamesInMemory(names);
     }
 }
